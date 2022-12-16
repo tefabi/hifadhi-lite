@@ -15,7 +15,7 @@ return new class extends Migration
   {
     Schema::create('text_records', function (Blueprint $table) {
       $table->bigIncrements('id');
-      $table->string('record');
+      $table->text('record');
 
       $table->softDeletes();
       $table->timestamps();
