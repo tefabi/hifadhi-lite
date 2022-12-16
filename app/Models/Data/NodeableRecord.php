@@ -6,18 +6,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Node extends Model
+class NodeableRecord extends Model
 {
   use HasFactory, SoftDeletes;
 
   protected $fillable = [
-    'name',
-    'data_type',
-    'description'
+    'nodeable_id',
+    'nodeable_type',
   ];
 
-  public function nodeableRecords()
+  public function nodeable()
   {
-    return $this->hasMany(NodeableRecord::class, 'node_id');
+    return $this->morphTo();
+  }
+
+  public function node()
+  {
+    return $this->belongsTo(Node::class, 'node_id');
   }
 }
