@@ -16,6 +16,11 @@ class Node extends Model
     'description'
   ];
 
+  public static $nodeTypes = [
+    'string',
+    'text'
+  ];
+
   public function nodeableRecords()
   {
     return $this->hasMany(NodeableRecord::class, 'node_id');
