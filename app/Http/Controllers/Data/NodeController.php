@@ -31,13 +31,13 @@ class NodeController extends Controller
   }
 
 
-  public function show(Node $node)
+  public function show(Node $node): JsonResponse
   {
     return response()->json($node);
   }
 
 
-  public function update(Request $request, Node $node)
+  public function update(Request $request, Node $node): JsonResponse
   {
     $validated = $request->validate([
       'name' => 'required|string',
