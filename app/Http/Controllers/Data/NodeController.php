@@ -24,7 +24,7 @@ class NodeController extends Controller
     $validated = $request->validate([
       'name' => 'required|string',
       'data_type' => ['required', Rule::in(NodeTypes::keys())],
-      'description' => 'required|string',
+      'description' => 'nullable|string',
     ]);
 
     $result = Node::create($validated);

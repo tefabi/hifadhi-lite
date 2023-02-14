@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Data\NodeController;
+use App\Models\Data\Node;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
+use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
 
@@ -18,8 +20,20 @@ it('can get node definition list', function () {
 
 
 it('can post node definition', function () {
+  $node = Node::factory()->create();
+
   $response = postJson(
-    '/api/v1/nodes/'
+    action([NodeController::class, 'store']),
+    [
+      'name' => $node->name,
+      'data_type' => $node->data_type,
+      'description' => $node->description,
+    ]
+  );
+
+  assertDatabaseHas(
+    'nodes',
+    ['name' => $node->name, 'data_type' => $node->data_type]
   );
 
   $response->assertStatus(201);
