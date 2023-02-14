@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Data;
 
 use App\Http\Controllers\Controller;
 use App\Models\Data\Node;
+use App\Models\Data\NodeTypes;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -22,7 +23,8 @@ class NodeController extends Controller
   {
     $validated = $request->validate([
       'name' => 'required|string',
-      'data_type' => ['required', Rule::in(Node::$nodeTypes)]
+      'data_type' => ['required', Rule::in(NodeTypes::keys())],
+      'description' => 'required|string',
     ]);
 
     $result = Node::create($validated);

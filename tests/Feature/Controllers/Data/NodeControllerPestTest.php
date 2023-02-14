@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Data\NodeTypes;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use function Pest\Laravel\getJson;
