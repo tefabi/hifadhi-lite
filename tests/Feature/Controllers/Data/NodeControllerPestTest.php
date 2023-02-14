@@ -38,3 +38,15 @@ it('can post node definition', function () {
 
   $response->assertStatus(201);
 });
+
+
+it('can not post invalid node definition', function () {
+  $response = postJson(
+    action([NodeController::class, 'store']),
+    [
+      'data_type' => Str::random()
+    ]
+  );
+
+  $response->assertInvalid(['name', 'data_type']);
+});
