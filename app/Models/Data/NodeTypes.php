@@ -18,6 +18,16 @@ enum NodeTypes: string
     };
   }
 
+
+  public function class_instance(): mixed
+  {
+    return match ($this) {
+      self::T_STRING => new StringRecord(),
+      self::T_TEXT => new TextRecord()
+    };
+  }
+
+
   public static function keys(): array
   {
     return  array_map(

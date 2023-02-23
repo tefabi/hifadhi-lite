@@ -13,7 +13,7 @@ class NodeControllerTest extends TestCase
 {
   use RefreshDatabase;
 
-  public function test_can_get_node_definition_list()
+  public function test_can_get_node_definition_list(): void
   {
     $response = $this->getJson(
       action([NodeController::class, 'index'])
@@ -22,7 +22,7 @@ class NodeControllerTest extends TestCase
     $response->assertStatus(200);
   }
 
-  public function test_can_post_node_definition()
+  public function test_can_post_node_definition(): void
   {
     $node = Node::factory()->create();
 
@@ -43,7 +43,7 @@ class NodeControllerTest extends TestCase
     $response->assertStatus(201);
   }
 
-  public function test_can_not_post_invalid_node_definition()
+  public function test_can_not_post_invalid_node_definition(): void
   {
     $response = $this->postJson(
       action([NodeController::class, 'store']),
