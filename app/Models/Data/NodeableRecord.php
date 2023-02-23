@@ -11,6 +11,7 @@ class NodeableRecord extends Model
   use HasFactory, SoftDeletes;
 
   protected $fillable = [
+    'node_id',
     'nodeable_id',
     'nodeable_type',
   ];
