@@ -44,14 +44,7 @@ class NodeableRecordController extends Controller
     $nodeable_record->nodeable_type = $node->node_type->class_name();
     $nodeable_record->save();
 
-    $result = [
-      'node' => $node,
-      'result' => NodeTypes::from($node->data_type)->class_name(),
-      'record' => $record_instance
-    ];
-
-
-    return response()->json($result, 201);
+    return response()->json($nodeable_record, 201);
   }
 
   /**
