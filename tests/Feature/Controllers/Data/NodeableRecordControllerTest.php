@@ -20,12 +20,15 @@ class NodeableRecordControllerTest extends TestCase
   {
     $node = Node::factory()->create();
 
+    $record_data = $this->faker->word;
     $response = $this->postJson(
       action([NodeableRecordController::class, 'store']),
-      ['node_id' => $node->id, 'record' => $this->faker->word]
+      ['node_id' => $node->id, 'record' => $record_data]
     );
 
-    dd(json_decode($response->getContent()));
-    $response->assertStatus(200);
+    $table_name = $node->node_type->class_instance()->getTable();
+    $this->assertDatabaseHas($table_name, ['record' => $record_data]);
+
+    $response->assertStatus(201);
   }
 }
