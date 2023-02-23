@@ -27,7 +27,16 @@ class NodeableRecordControllerTest extends TestCase
     );
 
     $table_name = $node->node_type->class_instance()->getTable();
+
     $this->assertDatabaseHas($table_name, ['record' => $record_data]);
+
+    $this->assertDatabaseHas(
+      'nodeable_records',
+      [
+        'node_id' => $node->id,
+        'nodeable_type' => $node->node_type->class_name()
+      ]
+    );;
 
     $response->assertStatus(201);
   }
