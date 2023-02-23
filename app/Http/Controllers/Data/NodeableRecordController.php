@@ -31,11 +31,10 @@ class NodeableRecordController extends Controller
       'record' => 'required'
     ]);
 
-    $node =  Node::find($fields['node_id']);
+    $node =  Node::find($fields['node_id']) // --
+      ->append('node_type');
 
-    $node_type = NodeTypes::from($node->data_type);
-
-    $record_instance = $node_type->class_instance();
+    $record_instance = $node->node_type->class_instance();
     $record_instance->record = $fields['record'];
     $record_instance->save();
 
