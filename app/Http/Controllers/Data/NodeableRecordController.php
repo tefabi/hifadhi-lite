@@ -33,12 +33,9 @@ class NodeableRecordController extends Controller
 
     $node =  Node::find($fields['node_id']);
 
-    // INFO: Create and instantiate a class from a qualified path like 
-    // App\Models\Data\Records\TextRecord
-    $record_qualified_class = NodeTypes::from($node->data_type)->class_name();
-    $record_class_ref = new \ReflectionClass($record_qualified_class);
-    $record_instance = $record_class_ref->newInstance();
+    $node_type = NodeTypes::from($node->data_type);
 
+    $record_instance = $node_type->class_instance();
     $record_instance->record = $fields['record'];
     $record_instance->save();
 
