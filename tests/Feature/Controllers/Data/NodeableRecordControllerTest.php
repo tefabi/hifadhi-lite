@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Controllers\Data;
 
+use App\Events\Data\DeletingNodeableRecordEvent;
 use App\Http\Controllers\Data\NodeableRecordController;
+use App\Listeners\Data\DeletingNodeableRecord;
 use App\Models\Data\Node;
 use App\Models\Data\NodeableRecord;
 use App\Models\Data\NodeTypes;
@@ -172,5 +174,57 @@ class NodeableRecordControllerTest extends TestCase
     $this->assertSoftDeleted($record_instance);
 
     $response->assertStatus(200);
+  }
+
+  public function test_can_dispatch_events_on_delete_node_record(): void
+  {
+    \Event::fake();
+
+    $node = Node::factory()->create(['data_type' => NodeTypes::T_STRING->value]);
+
+    $record_instance = $node->node_type->class_instance();
+
+    $record_instance->record = $this->faker->word;
+    $record_instance->save();
+
+    $nodeable_record = new NodeableRecord();
+    $nodeable_record->node_id = $node->id;
+    $nodeable_record->nodeable_id = $record_instance->id;
+    $nodeable_record->nodeable_type = $node->node_type->class_name();
+    $nodeable_record->save();
+
+    $this->deleteJson(action(
+      [NodeableRecordController::class, 'destroy'], // --
+      $nodeable_record->id
+    ));
+
+    \Event::assertDispatched(DeletingNodeableRecordEvent::class);
+    \Event::assertListening(
+      DeletingNodeableRecordEvent::class,
+      DeletingNodeableRecord::class
+    );
+  }
+
+
+  public function test_can_listener_delete_nodeable_on_delete_node_record(): void
+  {
+    $node = Node::factory()->create(['data_type' => NodeTypes::T_STRING->value]);
+
+    $record_instance = $node->node_type->class_instance();
+
+    $record_instance->record = $this->faker->word;
+    $record_instance->save();
+
+    $nodeable_record = new NodeableRecord();
+    $nodeable_record->node_id = $node->id;
+    $nodeable_record->nodeable_id = $record_instance->id;
+    $nodeable_record->nodeable_type = $node->node_type->class_name();
+    $nodeable_record->save();
+
+    $event = new DeletingNodeableRecordEvent($nodeable_record);
+    $listener = new DeletingNodeableRecord();
+    $listener->handle($event);
+
+    $this->assertSoftDeleted($record_instance);
   }
 }
