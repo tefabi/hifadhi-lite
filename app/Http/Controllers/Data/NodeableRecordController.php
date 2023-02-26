@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Data;
 use App\Http\Controllers\Controller;
 use App\Models\Data\Node;
 use App\Models\Data\NodeableRecord;
-use App\Models\Data\NodeTypes;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -28,14 +27,20 @@ class NodeableRecordController extends Controller
   {
     $fields = $request->validate([
       'node_id' => 'required|int|exists:nodes,id',
-      'record' => 'required'
     ]);
 
     $node =  Node::find($fields['node_id']) // --
       ->append('node_type');
 
     $record_instance = $node->node_type->class_instance();
-    $record_instance->record = $fields['record'];
+
+    $record_fields = $request->validate( // --
+      [
+        'record' => $record_instance->getValidationRules()
+      ]
+    );
+
+    $record_instance->record = $record_fields['record'];
     $record_instance->save();
 
     $nodeable_record = new NodeableRecord();

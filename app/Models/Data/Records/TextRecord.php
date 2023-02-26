@@ -23,6 +23,6 @@ class TextRecord extends Model implements IRecordValidated
 
   public function getValidationRules(): array
   {
-    return ['nullable', 'string'];
+    return ['required', 'string', 'ascii'];
   }
 }
