@@ -135,4 +135,15 @@ class NodeableRecordControllerTest extends TestCase
 
     $response->assertSuccessful();
   }
+
+
+  public function test_can_not_get_non_existent_node_record(): void
+  {
+    $response = $this->getJson(action(
+      [NodeableRecordController::class, 'show'], // --
+      -1
+    ));
+
+    $response->assertStatus(404);
+  }
 }
