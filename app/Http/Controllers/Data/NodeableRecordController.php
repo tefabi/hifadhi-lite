@@ -76,6 +76,10 @@ class NodeableRecordController extends Controller
    */
   public function destroy(string $id)
   {
-    //
+    $result = NodeableRecord::with('node', 'nodeable')->findOrFail($id);
+
+    $result->delete();
+
+    return response()->json($result, 200);
   }
 }

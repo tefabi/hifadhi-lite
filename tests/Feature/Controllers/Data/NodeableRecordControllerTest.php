@@ -146,4 +146,31 @@ class NodeableRecordControllerTest extends TestCase
 
     $response->assertStatus(404);
   }
+
+
+  public function test_can_delete_node_record(): void
+  {
+    $node = Node::factory()->create(['data_type' => NodeTypes::T_STRING->value]);
+
+    $record_instance = $node->node_type->class_instance();
+
+    $record_instance->record = $this->faker->word;
+    $record_instance->save();
+
+    $nodeable_record = new NodeableRecord();
+    $nodeable_record->node_id = $node->id;
+    $nodeable_record->nodeable_id = $record_instance->id;
+    $nodeable_record->nodeable_type = $node->node_type->class_name();
+    $nodeable_record->save();
+
+    $response = $this->deleteJson(action(
+      [NodeableRecordController::class, 'destroy'], // --
+      $nodeable_record->id
+    ));
+
+    $this->assertSoftDeleted($nodeable_record);
+    $this->assertSoftDeleted($record_instance);
+
+    $response->assertStatus(200);
+  }
 }
