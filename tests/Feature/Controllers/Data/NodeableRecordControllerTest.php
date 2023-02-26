@@ -35,7 +35,6 @@ class NodeableRecordControllerTest extends TestCase
       $nodeable_record->save();
     }
 
-
     $response = $this->getJson(action([NodeableRecordController::class, 'index']));
 
     $response->assertJson(
@@ -51,7 +50,7 @@ class NodeableRecordControllerTest extends TestCase
 
   public function test_can_post_nodeable_record(): void
   {
-    $node = Node::factory()->create();
+    $node = Node::factory()->create(['data_type' => NodeTypes::T_STRING->value]);
 
     $record_data = $this->faker->word;
     $response = $this->postJson(
@@ -102,5 +101,38 @@ class NodeableRecordControllerTest extends TestCase
     );
 
     $response->assertInvalid(['record']);
+  }
+
+  public function test_can_get_single_node_record(): void
+  {
+    $node = Node::factory()->create(['data_type' => NodeTypes::T_STRING->value]);
+
+    $record_instance = $node->node_type->class_instance();
+
+    $record_instance->record = $this->faker->word;
+    $record_instance->save();
+
+    $nodeable_record = new NodeableRecord();
+    $nodeable_record->node_id = $node->id;
+    $nodeable_record->nodeable_id = $record_instance->id;
+    $nodeable_record->nodeable_type = $node->node_type->class_name();
+    $nodeable_record->save();
+
+
+    $response = $this->getJson(action(
+      [NodeableRecordController::class, 'show'], // --
+      $nodeable_record->id
+    ));
+
+
+    $response->assertJson(
+      fn (AssertableJson $json) =>
+      $json->has('node')
+        ->has('nodeable')
+        ->where('nodeable.record', $record_instance->record)
+        ->etc()
+    );
+
+    $response->assertSuccessful();
   }
 }

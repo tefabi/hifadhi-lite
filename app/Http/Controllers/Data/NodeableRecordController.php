@@ -57,7 +57,9 @@ class NodeableRecordController extends Controller
    */
   public function show(string $id)
   {
-    //
+    $result = NodeableRecord::with('node', 'nodeable')->findOrFail($id);
+
+    return response()->json($result);
   }
 
 
