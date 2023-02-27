@@ -1,6 +1,8 @@
 #!/usr/bin/env groovy
 
-node('main') {
+pipeline {
+    agent any
+
     stage('say-hello') {
         sh "echo 'hello-world'"
     }
