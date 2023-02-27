@@ -4,9 +4,15 @@ pipeline {
     agent any
 
         stages {
-            stage('say-hello') {
+            stage('build') {
                 steps {
-                    sh "echo 'hello-world'"
+                    sh "cp .env.testing.jenkins .env.testing"
+                    sh "composer install"
+                }
+            }
+        stage('test') {
+                steps {
+                    sh "php artisan test"
                 }
             }
         }
