@@ -5,7 +5,9 @@ pipeline {
 
         stages {
             stage('say-hello') {
-                sh "echo 'hello-world'"
+                steps {
+                    sh "echo 'hello-world'"
+                }
             }
         }
 }
