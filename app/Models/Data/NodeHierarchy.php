@@ -19,6 +19,9 @@ class NodeHierarchy extends Model
     'quantity_type'
   ];
 
+  const QUANTITY_SINGLE = 'single';
+  const QUANTITY_MANY = 'many';
+
 
   public function node(): BelongsTo
   {
