@@ -19,7 +19,6 @@ class NodeHierarchyRecordControllerTest extends TestCase
   public function test_can_get_node_hierarchy_record_list(): void
   {
     $node = Node::factory()->create(['data_type' => NodeTypes::T_STRING->value]);
-    // --
 
     $hierarchy = NodeHierarchy::create([
       'node_id' => $node->id,
