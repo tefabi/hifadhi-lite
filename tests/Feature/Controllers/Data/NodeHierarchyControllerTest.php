@@ -13,9 +13,7 @@ use Tests\TestCase;
 class NodeHierarchyControllerTest extends TestCase
 {
   use RefreshDatabase;
-  /**
-   * A basic feature test example.
-   */
+
   public function test_can_get_node_hierarchy_list(): void
   {
     $node = Node::factory()->create();
