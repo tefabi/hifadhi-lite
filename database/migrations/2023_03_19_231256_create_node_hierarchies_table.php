@@ -14,14 +14,13 @@ return new class extends Migration
     Schema::create('node_hierarchies', function (Blueprint $table) {
       $table->bigIncrements('id');
       $table->unsignedBigInteger('node_id');
+      $table->unsignedBigInteger('node_hierarchy_root_id');
 
       $table->string('hierarchy', 60);
       $table->string('quantity_type', 10);
 
       $table->softDeletes();
       $table->timestamps();
-
-      $table->foreign('node_id')->references('id')->on('nodes');
     });
   }
 

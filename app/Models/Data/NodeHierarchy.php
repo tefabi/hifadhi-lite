@@ -15,6 +15,7 @@ class NodeHierarchy extends Model
 
   protected $fillable = [
     'node_id',
+    'node_hierarchy_root_id',
     'hierarchy',
     'quantity_type'
   ];

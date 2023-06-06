@@ -22,8 +22,6 @@ return new class extends Migration
 
       $table->softDeletes();
       $table->timestamps();
-
-      $table->foreign('node_id')->references('id')->on('nodes');
     });
   }
 

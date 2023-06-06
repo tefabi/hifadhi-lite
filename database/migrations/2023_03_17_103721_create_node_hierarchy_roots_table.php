@@ -11,11 +11,10 @@ return new class extends Migration
    */
   public function up(): void
   {
-    Schema::create('node_hierarchy_records', function (Blueprint $table) {
-      $table->bigIncrements('id');
-      $table->unsignedBigInteger('node_hierarchy_id');
-      $table->unsignedBigInteger('nodeable_record_id');
-
+    Schema::create('node_hierarchy_roots', function (Blueprint $table) {
+      $table->id();
+      $table->string('name', 50);
+      $table->string('description')->nullable();
       $table->softDeletes();
       $table->timestamps();
     });
@@ -26,6 +25,6 @@ return new class extends Migration
    */
   public function down(): void
   {
-    Schema::dropIfExists('node_hierarchy_records');
+    Schema::dropIfExists('node_hierarchy_roots');
   }
 };
